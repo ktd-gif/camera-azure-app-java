@@ -1,4 +1,7 @@
 # camera-azure-app-java
+
+[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://app.codspeed.io/ktd-gif/camera-azure-app-java?utm_source=badge)
+
 The app works like a stand alone camera app on your machine.  
 It lets you click pictures and uploads it to pre-configured storage account on Azure. It also lets you list and delete the pictures from the storage account. 
 It uses keyvault to hide storage account credentials, and your service principal needs to be given access to keyvault for you to be able to use the app. 
@@ -30,6 +33,22 @@ a. Configure Following Environment Variables: <br />
 
 b. Get your Service Principal added to camera vault's access policies. <br />
 c. Compile and run the app 
+
+
+Benchmarks:
+
+Performance of the capture path (frame conversion and JPEG encoding) is tracked with
+[CodSpeed](https://codspeed.io) using [JMH](https://github.com/openjdk/jmh) benchmarks living in
+`benchmarks/`. To run them locally (JDK 21+ required):
+
+```bash
+git submodule update --init third-party/codspeed-jvm
+git -C third-party/codspeed-jvm submodule update --init --recursive \
+  jmh-fork/jmh-core/native-instrument-hooks/instrument-hooks
+cd third-party/codspeed-jvm && ./gradlew -p jmh-fork publishToMavenLocal && cd -
+mvn -f benchmarks/pom.xml package
+java -jar benchmarks/target/benchmarks.jar -gc true
+```
 
 
 ScreenShots: 
